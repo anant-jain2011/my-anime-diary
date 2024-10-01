@@ -22,7 +22,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   if (typeof window != undefined) {
-    if (window && 'serviceWorker' in navigator) {
+    if (typeof window && 'serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js').then((registration) => {
           console.log('Service Worker registered with scope:', registration.scope);
