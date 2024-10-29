@@ -18,13 +18,12 @@ export default function Home() {
           });
         });
       }
-
+    }
+    if (typeof window != undefined && localStorage.getItem("profileObj")) {
+      location.pathname = "/dashboard";
     }
   });
   
-  if (typeof window != undefined && localStorage.getItem("profileObj")) {
-    location.pathname = "/dashboard";
-  }
 
   return (
     <>
