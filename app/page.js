@@ -1,16 +1,37 @@
 "use client";
 
 import Head from 'next/head';
-import Navbar from './components/Navbar';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
 
+  useEffect(() => {
+    if (typeof window != undefined) {
+      if (typeof window != undefined && "serviceWorker" in window.navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          }).catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+        });
+      }
+
+    }
+  });
+  
+  if (typeof window != undefined && localStorage.getItem("profileObj")) {
+    location.pathname = "/dashboard";
+  }
+
   return (
     <>
       <Head>
         <title>My Anime Diary</title>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#000000" />
       </Head>
 
       <div className="min-h-screen">

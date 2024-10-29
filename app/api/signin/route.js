@@ -8,6 +8,6 @@ export async function POST(request) {
 
     let newUser = await new User(data);
     newUser.save();
-    
-    return Response.json({"result": "success"}).status(200);
+
+    return new Response({ "userId": newUser._id });
 }
