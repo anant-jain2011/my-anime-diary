@@ -5,25 +5,42 @@ import { Button, Field, Input, Label, } from '@headlessui/react';
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
 
 const Edit = () => {
     const [anime, setAnime] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
     const [animeDeleteInfo, setAnimeDeleteInfo] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
-        let animes = localStorage.getItem("animes") || "[]";
+        let animes = localStorage.getItem("animes") || [];
         let i = +location.hash.replace("#", "");
 
-        setAnime(JSON.parse(animes)[i]);
+        setAnime(JSON.parse(animes).filter(n => !n.completed)[i]);
     }, []);
 
 
     const handleSubmit = (e) => {
-        let prevAnimes = JSON.parse(localStorage.getItem("animes")) || [];
-        localStorage.setItem("animes", JSON.stringify([...prevAnimes, anime]));
+        let prevAnimes = JSON.parse(localStorage.getItem("animes"));
+        let i = +location.hash.replace("#", "");
 
-        alert("anime added Successfully" + details.seasons.length);
+        prevAnimes = prevAnimes.filter(n => !n.completed)
+
+        prevAnimes[i] = anime;
+
+        localStorage.setItem("animes", JSON.stringify(prevAnimes));
+
+        toast.success('Your changes were saved.', {
+            position: "top-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+            transition: "bounce",
+        });
 
         router.push("/dashboard");
     };
@@ -66,6 +83,8 @@ const Edit = () => {
 
         // agar watchedEp aur totalEp equal ho jaaye toh completed = true
         temp2.completed = (temp2.totalEp == temp2.watchedEp);
+
+        // agar saare seasons complete ho jaye toh anime.completed = true
         animeCompleted = temp.every(n => n.completed);
 
         temp[indexToReplace] = temp2;
@@ -89,9 +108,8 @@ const Edit = () => {
             closeOnClick: false,
             pauseOnHover: true,
             draggable: true,
-            progress: undefined,
             theme: "light",
-            transition: Bounce,
+            transition: "bounce",
         });
 
         router.push("/dashboard");
@@ -137,7 +155,7 @@ const Edit = () => {
                     Save changes
                 </Button>
 
-                <Button className="rounded-md bg-red-600 w-full md:w-1/2 align-self-center mx-4 my-8 py-1 text-white hover:bg-red-500 active:bg-red-700 block ml-auto" style={{ "fontSize": "22px" }} type="submit" onClick={() => {
+                <Button className="rounded-md bg-red-600 w-full md:w-1/2 align-self-center mx-1 my-8 py-1 text-white hover:bg-red-500 active:bg-red-700 block sm:mx-auto mb-20" style={{ "fontSize": "22px" }} type="submit" onClick={() => {
                     setIsOpen(true);
                     let index = parseInt(location.hash.replace("#", ""));
                     setAnimeDeleteInfo({ name: anime.name, index });

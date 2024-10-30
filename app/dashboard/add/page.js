@@ -24,25 +24,37 @@ const Add = () => {
 
     const handleSubmit = (e) => {
         let details = { ...formData };
+        let animeCompleted = seasons.every(n => n.completed);
 
         enabled
             ? details = { // agar seasons hai toh ye kro
                 ...details,
                 seasonCount,
-                seasons
+                seasons,
+                completed: animeCompleted
             }
             : details = { // agar seasons nhi hai toh ye kro
                 ...details,
                 "seasonCount": 1,
-                seasons: [singleSeason]
+                seasons: [singleSeason],
+                completed: animeCompleted
             };
 
         let prevAnimes = JSON.parse(localStorage.getItem("animes")) || [];
         localStorage.setItem("animes", JSON.stringify([...prevAnimes, details]));
 
-        alert("anime added Successfully" + details.seasons.length);
+        toast.success("Anime Added Successfully!", {
+            position: "top-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+            transition: "bounce"
+        });
 
-        router.push("/dashboard");
+        setTimeout(router.push("/dashboard"), 2000);
     }
 
     const handleChange = (e, type) => {
@@ -99,7 +111,7 @@ const Add = () => {
 
         setSeasons(temp);
     }
-    
+
     const close = () => setIsOpen(false);
 
     return (
@@ -192,13 +204,11 @@ const Add = () => {
                         </>
                     }
 
-                    <Button className="rounded-md bg-blue-600 p-2 py-1 text-white hover:bg-blue-500 active:bg-blue-700 block ml-auto" style={{ "fontSize": "20px" }} type="submit">
+                    <Button className="rounded-md bg-blue-600 p-2 py-1 text-white hover:bg-blue-500 active:bg-blue-700 block ml-auto mb-16" style={{ "fontSize": "20px" }} type="submit">
                         Add Anime
                     </Button>
                 </form>
             </div>
-
-            <AnimeAddedDialog isOpen={isOpen} onClose={close} />
 
             <ToastContainer />
         </div>

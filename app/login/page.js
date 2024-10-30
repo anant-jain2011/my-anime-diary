@@ -6,15 +6,14 @@ import { useRouter } from 'next/navigation';
 import { useGlobalState } from '@/context/GlobalStateContext';
 
 const Login = () => {
-    const [loggedAsGuest, setLoggedAsGuest] = useState(false);
+    // const [loggedAsGuest, setLoggedAsGuest] = useState(false);
     const { globalState, setGlobalState } = useGlobalState();
     const ref = useRef();
-    const ref2 = useRef();
     const router = useRouter();
 
     useEffect(() => {
         if (globalState.profileObj) {
-            router.push("/");
+            router.push("/dashboard");
         }
 
         /* Initialize the Google Identity Services library */
@@ -29,17 +28,12 @@ const Login = () => {
             {
                 type: 'icon',
                 size: 'large',
-                shape: 'pill',
                 logo_alignment: 'left', // width in pixels
             } // customization attributes
         );
 
         window.google.accounts.id.prompt();
-
-        window.onload = () => {
-            ref2.current.onclick = () => ref.current.click();
-        }
-    }, [globalState.profileObj]);
+    }, []);
 
     // Handle the authenticated user
     const handleCredentialResponse = (response) => {
@@ -53,33 +47,40 @@ const Login = () => {
         let { name, given_name, picture } = googleUser;
         let profileObj = { name, first_name: given_name, picture, animes: [] };
 
-        let res = await fetch("/api/signin", {
-            "method": 'POST',
-            "headers": {
-                'Content-Type': 'application/json'
-            },
-            "body": JSON.stringify(profileObj),
-        });
+        // let res = await fetch("/api/signin", {
+        //     "method": 'POST',
+        //     "headers": {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     "body": JSON.stringify(profileObj),
+        // });
 
-        let resp = await res.json();
+        // let resp = await res.json();
 
         localStorage.setItem("profileObj", JSON.stringify(profileObj));
 
         setGlobalState({ ...globalState, profileObj });
+
+        toast.success("Logged In Successfully!", {
+            position: "top-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "light",
+            transition: "bounce"
+        });
+
+        setTimeout(router.push("/dashboard"), 2000);
     };
 
     const githubLoginUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}`;
 
-    return <div className="min-h-screen">
+    return <div className="min-h-screen flex flex-col items-center">
         {!globalState.profileObj
-            ? <div className="place-self-center bg-gray-200 w-96 h-fit py-5 flex justify-center items-center flex-col gap-y-4 mx-auto my-20 sm:my-4 relative">
+            ? <div className="place-self-center w-96 h-fit py-5 flex justify-center items-center flex-col gap-y-4 mx-auto my-20 sm:my-4 relative">
                 <h2 className="text-4xl text-center mb-5">Login Using</h2>
-
-                <div className="w-1/2 flex justify-between rounded-lg px-4 py-2 bg-white border border-gray-300 cursor-pointer hover:scale-105 active:scale-95" ref={ref2}>
-                    <div id="google-signin-button" hidden={!globalState.profileObj} className="w-1/2 text-lg h-10 rounded-lg" ref={ref}>
-                    </div>
-                    <p>Sign Up With Google</p>
-                </div>
 
                 <div className="w-3/5 flex justify-evenly items-center rounded-lg px-2 bg-white border border-gray-300 cursor-pointer h-16 hover:scale-105 active:scale-95" onClick={() => location.href = githubLoginUrl}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" className="w-8 h-8 mr-2">
@@ -92,13 +93,13 @@ const Login = () => {
                 Already Logged In
             </div>
         }
-        {!loggedAsGuest && <>
-            <p className="text-center">Or</p>
+        {/* {!loggedAsGuest && <>
+            <p className="text-center mb-4">Or</p>
 
-            <div className="w-3/5 flex justify-evenly items-center rounded-lg px-2 bg-white border border-gray-300 cursor-pointer h-16 hover:scale-105 active:scale-95">
+            <div className="w-3/5 flex mx-auto justify-evenly items-center rounded-lg px-2 bg-white border border-gray-300 cursor-pointer h-16 hover:scale-105 active:scale-95">
                 <p className="text-lg">Continue as a guest</p>
             </div>
-        </>}
+        </>} */}
     </div>;
 };
 

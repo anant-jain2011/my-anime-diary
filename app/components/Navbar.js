@@ -12,7 +12,6 @@ const Navbar = () => {
     const pathname = usePathname();
     const { globalState, setGlobalState } = useGlobalState();
     const ref = useRef(null);
-    // const [href, setHref] = useState(null);
 
     useEffect(() => {
         ref.current?.continuousStart(5, 100);
@@ -74,7 +73,7 @@ const Navbar = () => {
                             </Link>
                         </Menu.Item>
                         <Menu.Item>
-                            <a href={logout} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                            <a onClick={logout} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                                 Sign out
                             </a>
                         </Menu.Item>

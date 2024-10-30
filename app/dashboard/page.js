@@ -44,7 +44,7 @@ const Dashboard = () => {
         }
 
         if (location.href.includes("login")) {
-            
+
         }
     }, []);
 
@@ -215,13 +215,13 @@ const Dashboard = () => {
                         className={`absolute transition-transform duration-500 transform sm:translate-0 w-full pb-4 ${active ? 'translate-x-0' : '-translate-x-full'}`}
                         style={{ maxHeight: 'calc(100% - 70px)', overflowY: 'auto' }}
                     >
-                        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-x-[auto] justify-left mx-2 sm:mx-16">
-                            {animes.map((item, index) => {
+                        <div className="flex flex-col sm:grid sm:grid-cols-4 place-items-center gap-x-[auto] mx-2 sm:mx-20">
+                            {animes.filter(n => !n.completed).map((item, index) => {
                                 let animeProg = findCurrentEpisode(item);
                                 let percent = Math.round(animeProg.percent * 100 * 100) / 100;
 
-                                return <div key={index} className={"w-full"}>
-                                    <div className="py-2 px-5 border-2 border-gray-300 rounded-lg mx-2 mb-4 sm:w-[28%] relative">
+                                return (<>
+                                    <div className="py-2 px-5 border-2 border-gray-300 rounded-lg mb-4 relative" key={index}>
                                         <h2 className="text-2xl font-semibold">{item.name}</h2>
                                         <p className="text-sm my-1">
                                             Watched till Episode: {animeProg.ew} of Season: {animeProg.s}
@@ -234,40 +234,39 @@ const Dashboard = () => {
                                             </div>
                                         </div>
 
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 self-center mt-8 ml-2 cursor-pointer absolute top-0 right-3" onClick={() => {
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 self-center ml-2 cursor-pointer absolute top-2 right-2" onClick={() => {
                                             router.push("/dashboard/edit#" + index);
                                             setGlobalState({ ...globalState, " surfing": !globalState.surfing });
                                         }}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                    </svg>
-
-                                </div>
-                                </div>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        </svg>
+                                    </div>
+                                </>)
                             })}
+                        </div>
                     </div>
-                </div>
 
-                {/* Completed Section */}
-                <div
-                    className={`absolute transition-transform duration-500 transform sm:translate-0 w-full sm:max-h-full sm:pb-[72px] pb-[80px] ${active ? 'translate-x-full' : 'translate-x-0'}`}
-                    style={{ maxHeight: '100%', overflowY: 'auto' }}  // Individual scroll for this section
-                >
-                    <div className="flex flex-col sm:flex-row sm:flex-wrap justify-left mx-2 sm:mx-16">
-                        {mapData.completed.map((item, index) => (
-                            <div key={index} className="text-center rounded-lg px-2 mb-4 sm:w-1/4">
-                                <div className="text-center border-2 border-gray-300 rounded-lg py-2 flex justify-between pr-4">
-                                    <h2 className="text-2xl px-5 font-semibold text-left">{item}</h2>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#108705" className="h-8 w-8">
-                                        <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
-                                    </svg>
+                    {/* Completed Section */}
+                    <div
+                        className={`absolute transition-transform duration-500 transform sm:translate-0 w-full sm:max-h-full sm:pb-[72px] pb-[80px] ${active ? 'translate-x-full' : 'translate-x-0'}`}
+                        style={{ maxHeight: '100%', overflowY: 'auto' }}  // Individual scroll for this section
+                    >
+                        <div className="flex flex-col sm:flex-row sm:flex-wrap justify-left mx-2 sm:mx-16">
+                            {animes.filter(n => n.completed).map((item, index) => (
+                                <div key={index} className="text-center rounded-lg px-2 mb-4 sm:w-1/4">
+                                    <div className="text-center border-2 border-gray-300 rounded-lg py-2 flex justify-between pr-4">
+                                        <h2 className="text-2xl px-5 font-semibold text-left">{item.name}</h2>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#108705" className="h-8 w-8">
+                                            <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clipRule="evenodd" />
+                                        </svg>
 
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div >
     );
 };
