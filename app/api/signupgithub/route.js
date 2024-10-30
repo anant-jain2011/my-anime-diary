@@ -5,6 +5,8 @@ import { NextResponse } from 'next/server';
 export async function GET(request) {
     const searchParams = request.nextUrl.searchParams;
     const code = searchParams.get('code');
+    const GITHUB_CLIENT_SECRET = "caabdbcee742c97f32be59726e955c5040148bee";
+    const NEXT_PUBLIC_GITHUB_CLIENT_ID = "Ov23li9AYKIyX8gcBDI9";
 
     if (!code) {
         return res.status(400).send('Authorization code is missing');
@@ -14,8 +16,8 @@ export async function GET(request) {
         const response = await axios.post(
             'https://github.com/login/oauth/access_token',
             {
-                client_id: process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID,
-                client_secret: process.env.GITHUB_CLIENT_SECRET,
+                client_id: NEXT_PUBLIC_GITHUB_CLIENT_ID,
+                client_secret: GITHUB_CLIENT_SECRET,
                 code,
             },
             {

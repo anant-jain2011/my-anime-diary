@@ -75,7 +75,10 @@ const Login = () => {
         setTimeout(router.push("/dashboard"), 2000);
     };
 
-    const githubLoginUrl = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}`;
+    const NEXT_PUBLIC_GITHUB_CLIENT_ID = "Ov23li9AYKIyX8gcBDI9";
+    const NEXT_PUBLIC_REDIRECT_URI = "https://my-anime-diary.vercel.app/dashboard/";
+
+    const githubLoginUrl = `https://github.com/login/oauth/authorize?client_id=${NEXT_PUBLIC_GITHUB_CLIENT_ID}&redirect_uri=${NEXT_PUBLIC_REDIRECT_URI}`;
 
     return <div className="min-h-screen flex flex-col items-center">
         {!globalState.profileObj
